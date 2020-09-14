@@ -1,0 +1,51 @@
+Create Table shop (
+  	trans_id int(15) NOT NULL,
+	item_id int(15) NOT NULL,
+	date date,
+  	increase int(15) NOT NULL,
+  	decrease int(15) NOT NULL,
+  	PRIMARY KEY (trans_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE items (
+  id int(255) NOT NULL,
+  item_name varchar(255) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+  Insert into items (id, item_name)
+values 
+(1, 'notebook'),
+(2, 'eraser'),
+(3, 'whiteboard marker'),
+(4, 'permanent marker'),
+(5, 'whiteboard duster'),
+(6, 'keyboard'),
+(7, 'pen');
+
+https://www.db-fiddle.com/f/ba5cjqg4BFcEUdvKMNYVV3/0
+https://www.db-fiddle.com/f/ba5cjqg4BFcEUdvKMNYVV3/1
+https://www.db-fiddle.com/f/ba5cjqg4BFcEUdvKMNYVV3/2
+
+
+(SELECT
+    inv_trans_defs.date,
+    inv_trans_defs.id AS defs_id,
+    DATEDIFF(CURDATE(), inv_trans_defs.date) AS days_past,
+    IF(
+        inv_trans_defs.date BETWEEN '2020-08-01' AND '2020-08-06' AND qty_available IS NULL,
+        inv_trans_items.qty_out,
+        0
+    ) AS qty_sold_period,
+    IF(inv_trans_defs.date < '2020-08-01', inv_trans_items.qty_in, 0) as qty_in_before,
+    inv_trans_items.itemmaster_id,
+    inv_trans_items.vallocations_id,
+    inv_trans_items.id  as items_id
+FROM
+    inv_trans_items
+JOIN inv_trans_defs ON inv_trans_items.invtransdefs_id = inv_trans_defs.id  
+ORDER BY `defs_id`  DESC)
+
+
+
+
